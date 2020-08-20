@@ -50,6 +50,8 @@ println "${deployment.type.name()} BUILD"
 
 enum Platforms {
     LINUX("linux"),
+    LINUX_ARM64("linux-arm64"),
+    LINUX_ARM32("linux-arm32"),
     MACOS("macos"),
     WINDOWS("windows")
 
@@ -113,7 +115,7 @@ enum Artifacts {
     NFD(
         "lwjgl-nfd", "LWJGL - Native File Dialog bindings",
         "A tiny, neat C library that portably invokes native file open and save dialogs.",
-        Platforms.ALL
+        Platforms.LINUX, Platforms.MACOS, Platforms.WINDOWS
     ),
     NUKLEAR(
         "lwjgl-nuklear", "LWJGL - Nuklear bindings",
@@ -148,7 +150,8 @@ enum Artifacts {
     OPENVR(
         "lwjgl-openvr", "LWJGL - OpenVR bindings",
         "OpenVR is an API and runtime that allows access to VR hardware from multiple vendors without requiring that applications have specific knowledge of the hardware they are targeting.",
-        Platforms.ALL
+        "An API and runtime that allows access to VR hardware from multiple vendors without requiring that applications have specific knowledge of the hardware they are targeting.",
+        Platforms.LINUX, Platforms.MACOS, Platforms.WINDOWS
     ),
     OVR(
         "lwjgl-ovr", "LWJGL - OVR bindings",
@@ -173,7 +176,7 @@ enum Artifacts {
     SSE(
         "lwjgl-sse", "LWJGL - SSE bindings",
         "Simple SSE intrinsics.",
-        Platforms.ALL
+        Platforms.LINUX, Platforms.MACOS, Platforms.WINDOWS
     ),
     STB(
         "lwjgl-stb", "LWJGL - stb bindings",
@@ -193,7 +196,7 @@ enum Artifacts {
     TOOTLE(
         "lwjgl-tootle", "LWJGL - AMD Tootle bindings",
         "A 3D triangle mesh optimization library that improves on existing mesh preprocessing techniques.",
-        Platforms.ALL
+        Platforms.LINUX, Platforms.MACOS, Platforms.WINDOWS
     ),
     VULKAN(
         "lwjgl-vulkan", "LWJGL - Vulkan bindings",
