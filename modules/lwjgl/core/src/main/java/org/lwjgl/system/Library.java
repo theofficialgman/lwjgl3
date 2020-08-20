@@ -29,9 +29,8 @@ import static org.lwjgl.system.Checks.*;
 public final class Library {
 
     /** The LWJGL shared library name. */
-    public static final String JNI_LIBRARY_NAME = Configuration.LIBRARY_NAME.get(System.getProperty("os.arch").contains("64") ? "lwjgl" : "lwjgl32");
-
-    private static final String JAVA_LIBRARY_PATH = "java.library.path";
+    public static final String JNI_LIBRARY_NAME = Configuration.LIBRARY_NAME.get(Platform.mapLibraryNameBundled("lwjgl"));
+    static final String JAVA_LIBRARY_PATH = "java.library.path";
 
     private static final Pattern PATH_SEPARATOR = Pattern.compile(File.pathSeparator);
 
@@ -98,7 +97,7 @@ public final class Library {
         String libName = Platform.get().mapLibraryName(name);
 
         // METHOD 2: org.lwjgl.librarypath
-        URL libURL = context.getClassLoader().getResource(libName);
+        URL libURL = findURL(context, libName, name.contains("lwjgl"));
         if (libURL == null) {
             if (loadSystem(load, context, libName, Configuration.LIBRARY_PATH)) {
                 return;
@@ -220,7 +219,7 @@ public final class Library {
         SharedLibrary lib;
 
         // METHOD 2: org.lwjgl.librarypath
-        URL libURL = context.getClassLoader().getResource(libName);
+        URL libURL = findURL(context, libName, bundledWithLWJGL);
         if (libURL == null) {
             lib = loadNative(context, libName, Configuration.LIBRARY_PATH);
             if (lib != null) {
@@ -400,6 +399,18 @@ public final class Library {
     }
 
     @Nullable
+    static URL findURL(Class<?> context, String resource, boolean bundledWithLWJGL) {
+        URL url = null;
+        if (bundledWithLWJGL) {
+            String bundledResource = Platform.mapLibraryPathBundled(resource);
+            if (!bundledResource.equals(resource)) {
+                url = context.getClassLoader().getResource(bundledResource);
+            }
+        }
+        return url == null ? context.getClassLoader().getResource(resource) : url;
+    }
+
+    @Nullable
     private static Path findLibrary(String path, String libName) {
         for (String directory : PATH_SEPARATOR.split(path)) {
             Path p = Paths.get(directory, libName);
@@ -408,8 +419,8 @@ public final class Library {
             }
         }
         return null;
-    }
-
+    }    
+    
     private static void printError(boolean bundledWithLWJGL) {
         DEBUG_STREAM.println(
             "[LWJGL] Failed to load a library. Possible solutions:\n" + (bundledWithLWJGL
