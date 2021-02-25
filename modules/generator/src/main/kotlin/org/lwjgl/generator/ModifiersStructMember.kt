@@ -77,14 +77,13 @@ class AutoSizeIndirect(
     }
 }
 
-/** Marks a member as a callback member's "user data". */
-class UserDataMember(
-    override val reference: String = ""
-) : StructMemberModifier, ReferenceModifier {
+/** Marks an array member as terminated by the specified value. */
+class TerminatedMember(val value: String) : StructMemberModifier {
     override val isSpecial = true
     override fun validate(member: StructMember) {
-        if (!(member.nativeType is PointerType<*> && member.nativeType.elementType is OpaqueType)) {
-            throw IllegalArgumentException("The UserData modifier can only be applied to opaque pointer parameters.")
+        require(member is StructMemberArray) {
+            "The NullTerminated modifier can only be applied to array members."
         }
     }
 }
+val NullTerminatedMember = TerminatedMember("")

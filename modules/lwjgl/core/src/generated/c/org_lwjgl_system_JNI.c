@@ -455,10 +455,6 @@ JNIEXPORT jlong JNICALL Java_org_lwjgl_system_JNI_invokePJ__JIJ(JNIEnv *__env, j
 JNIEXPORT jlong JNICALL CRITICAL(org_lwjgl_system_JNI_invokePJ__JFIFIJ)(jlong param0, jfloat param1, jint param2, jfloat param3, jint param4, jlong __functionAddress) {
     return ((jlong (*) (intptr_t, jfloat, jint, jfloat, jint))(intptr_t)__functionAddress)((intptr_t)param0, param1, param2, param3, param4);
 }
-JNIEXPORT jlong JNICALL Java_org_lwjgl_system_JNI_invokePJ__JFIFIJ(JNIEnv *__env, jclass clazz, jlong param0, jfloat param1, jint param2, jfloat param3, jint param4, jlong __functionAddress) {
-    UNUSED_PARAMS(__env, clazz)
-    return CRITICAL(org_lwjgl_system_JNI_invokePJ__JFIFIJ)(param0, param1, param2, param3, param4, __functionAddress);
-}
 JNIEXPORT jlong JNICALL JavaCritical_org_lwjgl_system_JNI_invokePPJ__JJJ(jlong param0, jlong param1, jlong __functionAddress) {
     return ((jlong (*) (intptr_t, intptr_t))(intptr_t)__functionAddress)((intptr_t)param0, (intptr_t)param1);
 }
@@ -584,6 +580,10 @@ JNIEXPORT jlong JNICALL JavaCritical_org_lwjgl_system_JNI_invokePP__JIIIJ(jlong 
 JNIEXPORT jlong JNICALL Java_org_lwjgl_system_JNI_invokePP__JIIIJ(JNIEnv *__env, jclass clazz, jlong param0, jint param1, jint param2, jint param3, jlong __functionAddress) {
     UNUSED_PARAMS(__env, clazz)
     return JavaCritical_org_lwjgl_system_JNI_invokePP__JIIIJ(param0, param1, param2, param3, __functionAddress);
+}
+JNIEXPORT jlong JNICALL Java_org_lwjgl_system_JNI_invokePP__JFIFIJ(JNIEnv *__env, jclass clazz, jlong param0, jfloat param1, jint param2, jfloat param3, jint param4, jlong __functionAddress) {
+    UNUSED_PARAMS(__env, clazz)
+    return (jlong)((intptr_t (*) (intptr_t, jfloat, jint, jfloat, jint))(intptr_t)__functionAddress)((intptr_t)param0, param1, param2, param3, param4);
 }
 JNIEXPORT jlong JNICALL JavaCritical_org_lwjgl_system_JNI_invokeJP__SSSBIJJ(jshort param0, jshort param1, jshort param2, jbyte param3, jint param4, jlong param5, jlong __functionAddress) {
     return (jlong)((intptr_t (*) (jshort, jshort, jshort, jbyte, jint, jlong))(intptr_t)__functionAddress)(param0, param1, param2, param3, param4, param5);
