@@ -1255,11 +1255,17 @@
                 <get-release platform="macos" arch="x64" file="libglfw.dylib"/>
                 <get-release platform="macos" arch="x64" file="libglfw.dylib.git"/>
 
+                <get-release platform="macos" arch="arm64" file="libglfw.dylib"/>
+                <get-release platform="macos" arch="arm64" file="libglfw.dylib.git"/>
+
                 <get-release platform="windows" arch="x64" file="glfw.dll"/>
                 <get-release platform="windows" arch="x64" file="glfw.dll.git"/>
 
                 <get-release platform="windows" arch="x86" file="glfw.dll"/>
                 <get-release platform="windows" arch="x86" file="glfw.dll.git"/>
+
+                <get-release platform="windows" arch="arm64" file="glfw.dll"/>
+                <get-release platform="windows" arch="arm64" file="glfw.dll.git"/>
             </natives>
         </release-module>
 
@@ -1287,8 +1293,10 @@
                 <get-release platform="linux" arch="x64" file="liblwjgl_meow.so"/>
                 <get-release platform="linux" arch="arm64" file="liblwjgl_meow.so"/>
                 <get-release platform="macos" arch="x64" file="liblwjgl_meow.dylib"/>
+                <get-release platform="macos" arch="arm64" file="liblwjgl_meow.dylib"/>
                 <get-release platform="windows" arch="x64" file="lwjgl_meow.dll"/>
                 <get-release platform="windows" arch="x86" file="lwjgl_meow.dll"/>
+                <get-release platform="windows" arch="arm64" file="lwjgl_meow.dll"/>
             </natives>
         </release-module>
 
@@ -1296,14 +1304,7 @@
         <release-module name="nanovg" native-library="lwjgl_nanovg" title="NanoVG" if:true="${binding.nanovg}"/>
 
         <!-- Native File Dialog -->
-        <release-module name="nfd" title="Native File Dialog" if:true="${binding.nfd}">
-            <natives>
-                <get-release platform="linux" arch="x64" file="liblwjgl_nfd.so"/>
-                <get-release platform="macos" arch="x64" file="liblwjgl_nfd.dylib"/>
-                <get-release platform="windows" arch="x64" file="lwjgl_nfd.dll"/>
-                <get-release platform="windows" arch="x86" file="lwjgl_nfd.dll"/>
-            </natives>
-        </release-module>
+        <release-module name="nfd" native-library="lwjgl_nfd" title="Native File Dialog" if:true="${binding.nfd}"/>
 
         <!-- Nuklear -->
         <release-module name="nuklear" native-library="lwjgl_nuklear" title="Nuklear" if:true="${binding.nuklear}"/>
@@ -1326,11 +1327,17 @@
                 <get-release platform="macos" arch="x64" file="libopenal.dylib"/>
                 <get-release platform="macos" arch="x64" file="libopenal.dylib.git"/>
 
+                <get-release platform="macos" arch="arm64" file="libopenal.dylib"/>
+                <get-release platform="macos" arch="arm64" file="libopenal.dylib.git"/>
+
                 <get-release platform="windows" arch="x64" file="OpenAL.dll"/>
                 <get-release platform="windows" arch="x64" file="OpenAL.dll.git"/>
 
                 <get-release platform="windows" arch="x86" file="OpenAL.dll"/>
                 <get-release platform="windows" arch="x86" file="OpenAL.dll.git"/>
+
+                <get-release platform="windows" arch="arm64" file="OpenAL.dll"/>
+                <get-release platform="windows" arch="arm64" file="OpenAL.dll.git"/>
             </natives>
         </release-module>
 
@@ -1421,6 +1428,8 @@
             <natives>
                 <get-release platform="macos" arch="x64" file="libMoltenVK.dylib"/>
                 <get-release platform="macos" arch="x64" file="libMoltenVK.dylib.git"/>
+                <get-release platform="macos" arch="arm64" file="libMoltenVK.dylib"/>
+                <get-release platform="macos" arch="arm64" file="libMoltenVK.dylib.git"/>
             </natives>
         </release-module>
 

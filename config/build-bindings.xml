@@ -23,7 +23,12 @@ This script is included in /config/build-definitions.xml.
     </condition>
 
     <property name="binding.assimp" value="true"/>
-    <property name="binding.bgfx" value="true"/>
+    <condition property="binding.bgfx" value="false" else="true">
+        <and>
+            <isset property="platform.windows"/>
+            <isset property="build.arch.arm"/>
+        </and>
+    </condition>
     <property name="binding.bullet" value="false"/>
     <property name="binding.cuda" value="true"/>
     <property name="binding.egl" value="true"/>
@@ -41,7 +46,7 @@ This script is included in /config/build-definitions.xml.
         </or>
     </condition>
     <property name="binding.nanovg" value="true"/>
-    <condition property="binding.nfd" value="true" else="false"><isset property="notARM"/></condition>
+    <property name="binding.nfd" value="true"/>
     <property name="binding.nuklear" value="true"/>
     <property name="binding.odbc" value="true"/>
     <property name="binding.openal" value="true"/>

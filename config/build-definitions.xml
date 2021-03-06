@@ -29,8 +29,6 @@ This script is included in /build.xml and /config/update-dependencies.xml.
 
     <property name="build.arch.${build.arch}" value="true"/>
 
-    <import file="build-bindings.xml"/>
-
     <!--
     This is used as the source of binary dependencies. Valid values:
     - nightly
@@ -148,6 +146,8 @@ This script is included in /build.xml and /config/update-dependencies.xml.
 
     <!-- Different location per platform/architecture. This is intentional. -->
     <property name="bin.native" location="bin/${platform}/${build.arch}" relative="true"/>
+
+    <import file="build-bindings.xml"/>
 
     <presetdef name="lwjgl.javac">
         <javac sourcepath="" debug="yes" source="8" target="8" encoding="UTF-8">
