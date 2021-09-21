@@ -12,11 +12,17 @@
         <isset property="gcc.prefix"/>
     </condition>
 
+    <condition property="gcc.suffix" value="-${gcc.version}" else="">
+        <isset property="gcc.version"/>
+    </condition>
+
     <property name="module.lwjgl.rel" value="../../../../${module.lwjgl}"/>
 
     <macrodef name="compile">
         <attribute name="dest" default="${dest}"/>
         <attribute name="lang" default="c"/>
+        <attribute name="gcc.exec" default="${gcc.prefix}gcc${gcc.suffix}"/>
+        <attribute name="gpp.exec" default="${gcc.prefix}g++${gcc.suffix}"/>
         <attribute name="lto" default="-flto"/>
         <attribute name="flags" default=""/>
         <attribute name="simple" default="false"/>
@@ -26,8 +32,7 @@
             <local name="cpp"/>
             <condition property="cpp"><not><equals arg1="@{lang}" arg2="c"/></not></condition>
             <local name="gcc"/>
-            <condition property="gcc" value="gcc" else="g++"><equals arg1="@{lang}" arg2="c"/></condition>
-
+            <condition property="gcc" value="@{gcc.exec}" else="@{gpp.exec}"><equals arg1="@{lang}" arg2="c"/></condition>
             <mkdir dir="@{dest}"/>
             <apply dir="@{dest}" executable="${gcc}" dest="@{dest}" skipemptyfilesets="true" failonerror="true" parallel="true" taskname="Compiler">
                 <arg line="-c -std=c11" unless:set="cpp"/>
@@ -56,6 +61,8 @@
         <attribute name="module"/>
         <attribute name="linker" default="gcc"/>
         <attribute name="lang" default="c"/>
+        <attribute name="gcc.exec" default="${gcc.prefix}gcc${gcc.suffix}"/>
+        <attribute name="gpp.exec" default="${gcc.prefix}g++${gcc.suffix}"/>
         <attribute name="flags" default="-Werror -Wfatal-errors"/>
         <attribute name="simple" default="false"/>
         <element name="beforeCompile" optional="true"/>
@@ -79,7 +86,7 @@
             <property name="dest" value="${bin.native}/@{module}"/>
 
             <beforeCompile/>
-            <compile lang="@{lang}" flags="@{flags}" simple="@{simple}">
+            <compile lang="@{lang}" gcc.exec="@{gcc.exec}" gpp.exec="@{gpp.exec}" flags="@{flags}" simple="@{simple}">
                 <source/>
             </compile>
 
@@ -93,8 +100,12 @@
             <property name="version.script" location="config/${platform}/version.script"/>
 
             <local name="gcc"/>
-            <condition property="gcc" value="@{linker}"><not><equals arg1="@{linker}" arg2="gcc"/></not></condition>
-            <condition property="gcc" value="gcc" else="g++"><equals arg1="@{lang}" arg2="c"/></condition>
+            <condition property="gcc" value="@{gcc.exec}" else="@{gpp.exec}">
+                <and>
+                    <equals arg1="@{lang}" arg2="c"/>
+                    <equals arg1="@{linker}" arg2="gcc"/>
+                </and>
+            </condition>
 
             <echo message="Linking ${name}" taskname="${gcc}" unless:set="lib-uptodate"/>
             <beforeLink/>
@@ -123,8 +134,10 @@
 
     <macrodef name="build_simple">
         <attribute name="module"/>
+        <attribute name="gcc.exec" default="${gcc.prefix}gcc${gcc.suffix}"/>
+        <attribute name="gpp.exec" default="${gcc.prefix}g++${gcc.suffix}"/>
         <sequential>
-            <build module="@{module}" simple="true" if:true="${binding.@{module}}"/>
+            <build module="@{module}" gcc.exec="@{gcc.exec}" gpp.exec="@{gpp.exec}" simple="true" if:true="${binding.@{module}}"/>
         </sequential>
     </macrodef>
 
@@ -247,13 +260,8 @@
             </source>
         </build>
 
-        <!-- rpmalloc: requires GCC 4.9 or higher -->
-        <local name="rpmalloc.gcc"/>
-        <condition property="rpmalloc.gcc" value="${gcc.prefix}gcc-4.9">
-            <matches string="${gcc.version}" pattern="[1-3]\.\d|4\.[0-8]"/>
-        </condition>
-        <build_simple module="rpmalloc" unless:set="rpmalloc.gcc"/>
-        <build_simple module="rpmalloc" gcc.exec="${rpmalloc.gcc}" if:set="rpmalloc.gcc"/>
+        <!-- rpmalloc -->
+        <build_simple module="rpmalloc"/>
 
         <!-- SSE -->
         <build module="sse" simple="true" if:true="${binding.sse}">
