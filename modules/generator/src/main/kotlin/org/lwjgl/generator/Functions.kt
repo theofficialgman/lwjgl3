@@ -1799,18 +1799,31 @@ class Func(
         // Cast addresses to pointers
 
         getNativeParams(withExplicitFunctionAddress = false)
-            .filter { it.nativeType.castAddressToPointer }
-            .forEach {
-                val pointerType = it.toNativeType(nativeClass.binding, pointerMode = true)
-                print("$t$pointerType")
-                if (!pointerType.endsWith('*')) print(' ')
-                val castExpression = if (it.nativeType === va_list) {
-                    print("*")
-                    "VA_LIST_CAST"
-                } else
-                    "($pointerType)"
-                println("${it.name} = $castExpression${if (variableType != "intptr_t") "(intptr_t)" else ""}${it.name}$POINTER_POSTFIX;")
-            }
+                .filter { it.nativeType.castAddressToPointer }
+                .forEach {
+                    val variableType = if (it.nativeType === va_list)
+                        "va_list *"
+                    else
+                        it.toNativeType(nativeClass.binding, pointerMode = true)
+                    print(t)
+                    if (it.nativeType is FunctionType && variableType.contains("(*)")) {
+                        print(variableType.replace("(*)", "(*${it.name})"))
+                    } else {
+                        print(variableType)
+                        if (!variableType.endsWith('*')) {
+                            print(' ')
+                        }
+                        print(it.name)
+                    }
+                    println(
+                        " = ${if (it.nativeType === va_list) {
+                            "VA_LIST_CAST"
+                        } else {
+                            "($variableType)"
+                        }
+                        }${if (variableType != "intptr_t") "(intptr_t)" else ""}${it.name}$POINTER_POSTFIX;"
+                    )
+                }
 
         // Custom code
 
