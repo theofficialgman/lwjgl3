@@ -207,6 +207,20 @@ class CallbackType internal constructor(
     override val const by lazy { CallbackType(function, name.const) }
 }
 
+// Pointers wrapped in Java classes
+open class WrappedPointerType(
+    /** The Java wrapper class. */
+    val className: String,
+    /** The type used in the native API. */
+    name: String = className,
+    /** If true, the native typedef includes a pointer. */
+    includesPointer: Boolean = true
+) : PointerType<OpaqueType>(name, PointerMapping.OPAQUE_POINTER, includesPointer, elementType = name.opaque) {
+    override val javaMethodType
+        get() = className
+    override val const by lazy { WrappedPointerType(className, name.const) }
+}
+
 // Function types (callbacks)
 class FunctionType internal constructor(
     val function: CallbackFunction,
