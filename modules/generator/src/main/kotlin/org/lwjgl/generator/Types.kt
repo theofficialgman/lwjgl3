@@ -207,6 +207,16 @@ class CallbackType internal constructor(
     override val const by lazy { CallbackType(function, name.const) }
 }
 
+// Function types (callbacks)
+class FunctionType internal constructor(
+    val function: CallbackFunction,
+    name: String = function.nativeType
+) : WrappedPointerType(function.className, name) {
+    override val javaMethodType
+        get() = "${super.javaMethodType}I"
+    override val const by lazy { FunctionType(function, name.const) }
+}
+
 // typedefs
 fun typedef(typedef: PrimitiveType, name: String) = PrimitiveType(name, typedef.mapping)
 fun typedef(typedef: IntegerType, name: String) = IntegerType(name, typedef.mapping, typedef.unsigned)
